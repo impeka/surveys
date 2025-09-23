@@ -73,7 +73,11 @@ class Plugin {
             $post_id = (int) $_POST['post_ID'];
         }
 
-        $has_entry = $post_id ? (bool) get_post_meta($post_id, '_entry_id', true) : false;
+        if( ! $post_id ) {
+            return $match;
+        }
+
+        $has_entry = (bool) get_post_meta( $post_id, '_entry_id', true );
 
         return ! $has_entry;
     }

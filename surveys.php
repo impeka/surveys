@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:  Surveys
- * Version:      1.0.2
+ * Version:      1.0.3
  * Author:       Impeka
  * Author URI:   https://impeka.com
 */
@@ -22,6 +22,6 @@ add_action( 'plugins_loaded', function () {
 
     //load_plugin_textdomain( 'my-plugin', false, basename( MY_PLUGIN_DIR ) . '/languages' );
 
-    $plugin = Plugin::getInstance( __FILE__, __DIR__, plugin_dir_url( __FILE__ ), '1.0.2' );
+    $plugin = Plugin::getInstance( __FILE__, __DIR__, plugin_dir_url( __FILE__ ), '1.0.3' );
     $plugin->boot();
 });
