@@ -114,7 +114,6 @@ class SurveyArchiveManager {
         }
 
         $orderby = $q->get('orderby');
-        $entry_key = $keys['entry_id'] ?? '_entry_id';
 
         switch( $orderby ) {
             case 'impeka_ref':
@@ -128,8 +127,14 @@ class SurveyArchiveManager {
                 break;
 
             case 'impeka_entry':
-                $q->set( 'meta_key', $entry_key );
                 $q->set( 'orderby', 'meta_value_num' );
+
+                $q->set('meta_query', [
+                    'relation' => 'OR',
+                    [ 'key' => '_entry_id', 'compare' => 'EXISTS'     ],
+                    [ 'key' => '_entry_id', 'compare' => 'NOT EXISTS' ],
+                ]);
+
                 break;
         }
     }
