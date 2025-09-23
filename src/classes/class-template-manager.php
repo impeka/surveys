@@ -15,9 +15,17 @@ class TemplateManager {
         add_action( 'init', [$this, 'rewrite_rules'] );
 
         add_filter( 'template_include', [$this, 'select_template'], 10 );
+        add_filter( 'template_redirect', [$this, 'redirect_on_archive'], 10 );
         add_filter( 'request', [$this, 'request'], 10 );
         add_filter( 'post_type_link', [$this, 'post_type_link'], 10, 2);
         add_filter( 'redirect_canonical', [$this, 'redirect_canonical'] );
+    }
+
+    public function redirect_on_archive() : void {
+        if( is_post_type_archive( 'impeka-survey' ) ) {
+            wp_safe_redirect( home_url( '/' ) );
+            exit;
+        }
     }
 
     public function redirect_canonical( string $redirect_url ) : string {
