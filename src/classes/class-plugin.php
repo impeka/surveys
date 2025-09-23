@@ -77,6 +77,10 @@ class Plugin {
             return $match;
         }
 
+        if( get_post_type( $post_id ) != 'impeka-survey' ) {
+            return $match;
+        }
+
         $has_entry = (bool) get_post_meta( $post_id, '_entry_id', true );
 
         return ! $has_entry;
