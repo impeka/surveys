@@ -26,9 +26,9 @@ class RequestSendSurvey {
 
             $headers = ['Content-Type: text/html; charset=UTF-8'];
 
-            $message = str_replace( '[SURVEY_URL]', get_permalink( $post ), $message, $headers );
+            $message = str_replace( '[SURVEY_URL]', get_permalink( $post ), $message );
 
-            wp_mail( $to, $subject, $message );
+            wp_mail( $to, $subject, $message, $headers );
         }
     }
 
