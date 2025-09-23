@@ -1,0 +1,3 @@
+# Ignore the VS Code workspace file (repo root)
+#/surveys.code-workspace
+/surveys.code-workspace
