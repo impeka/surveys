@@ -78,8 +78,8 @@ class TemplateManager {
         }
 
         $theme_template = locate_template( [
-            'archive-impeka-survey.php',
-            'templates/archive-impeka-survey.php'
+            'single-impeka-survey.php',
+            'templates/single-impeka-survey.php'
         ] );
 
         if( $theme_template ) {
