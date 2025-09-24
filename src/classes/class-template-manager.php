@@ -38,10 +38,10 @@ class TemplateManager {
             return $redirect_url;
         }
 
-        $target = home_url( sprintf( '/survey/%s/', $post->ID ) );
+        $target = home_url( sprintf( '/survey/%s-%s/', $post->ID, $this->_generate_token( $post->ID ) ) );
 
         $req = (string) ( $_SERVER['REQUEST_URI'] ?? '' );
-        if( stripos( $req, sprintf( '/survey/%s/', $post->ID ) ) === false ) {
+        if( stripos( $req, sprintf( '/survey/%s-%s/', $post->ID, $this->_generate_token( $post->ID ) ) ) === false ) {
             return $target;
         }
 
@@ -53,13 +53,18 @@ class TemplateManager {
             return $url;
         } 
 
-        return home_url( sprintf( '/survey/%s/', $post->ID ) );
+        return home_url( sprintf( '/survey/%s-%s/', $post->ID, $this->_generate_token( $post->ID ) ) );
     }
 
     public function request( array $vars ) : array {
         if( ! empty( $vars['impeka_survey_id'] ) ) {
-            $id = (int) $vars['impeka_survey_id'];
-            $vars['p'] = $id;
+            $id_parts = explode( '-', $vars['impeka_survey_id'] );
+
+            if( $this->_generate_token( $id_parts[0] ) != $id_parts[1] ) {
+                return ['error' => '404'];
+            }
+
+            $vars['p'] = $id_parts[0];
             $vars['post_type'] = 'impeka-survey';
             unset( $vars['impeka_survey_id'] );
         }
@@ -67,9 +72,15 @@ class TemplateManager {
         return $vars;
     }
 
+    private function _generate_token( string $id ) {
+        $hash = hash( 'sha256', $id );
+        $hash = substr( preg_replace( '/[^a-zA-Z0-9]/', '', $hash ), 0, 6 );
+        return $hash;
+    }
+
     public function rewrite_rules() : void {
-        add_rewrite_tag( '%impeka_survey_id%', '([0-9]+)' );
-        add_rewrite_rule( '^survey/([0-9]+)/?$', 'index.php?impeka_survey_id=$matches[1]', 'top' );
+        add_rewrite_tag( '%impeka_survey_id%', '([0-9]+-[0-9a-zA-Z]+)' );
+        add_rewrite_rule( '^survey/([0-9]+-[0-9a-zA-Z]+)/?$', 'index.php?impeka_survey_id=$matches[1]', 'top' );
     }
 
     public function select_template( string $template ) : string {
